@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import NavBar from "../Components/NavBar";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 function EditUser() {
   const [email, setEmail] = useState("");
@@ -7,12 +9,61 @@ function EditUser() {
   const [lastName, setLastName] = useState("");
   const [firstName, setFirstName] = useState("");
 
+  // get the userId from the URL
+  const { userId } = useParams();
+  const navigate = useNavigate();
+
   useEffect(() => {
-    //
+    // make a GET request to get all the user details from the user id
+    axios
+      .get(`http://localhost:8080/api/v1/user/${userId}`)
+      .then((response) => {
+        if (response.data != null) {
+          setFirstName(response.data.firstName);
+          setLastName(response.data.lastName);
+          setEmail(response.data.email);
+          setPhoneNo(response.data.phoneNo);
+        } else {
+          alert("user not found in the database");
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }, []);
 
   const handleFormSubmit = (e) => {
-    //
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("id", userId);
+    formData.append("firstName", firstName);
+    formData.append("lastName", lastName);
+    formData.append("email", email);
+    formData.append("phoneNo", phoneNo);
+
+    // make a PUT request to update the user details in the database
+    axios
+      .put("http://localhost:8080/api/v1/updateuser", formData, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+      .then((response) => {
+        if (response.status === 200) {
+          alert("User Details updated successfully!");
+          setFirstName("");
+          setLastName("");
+          setEmail("");
+          setPhoneNo("");
+          navigate("/users");
+        } else {
+          alert(response.data);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+        alert(error);
+      });
   };
 
   return (
@@ -34,6 +85,7 @@ function EditUser() {
                     id="fname"
                     className="form-control"
                     onChange={(e) => setFirstName(e.target.value)}
+                    value={firstName ? firstName : ""}
                     required
                   />
                 </div>
@@ -49,6 +101,7 @@ function EditUser() {
                     id="lname"
                     className="form-control"
                     onChange={(e) => setLastName(e.target.value)}
+                    value={lastName ? lastName : ""}
                     required
                   />
                 </div>
@@ -63,6 +116,7 @@ function EditUser() {
                 name="phoneNo"
                 id="phone"
                 onChange={(e) => setPhoneNo(e.target.value)}
+                value={phoneNo ? phoneNo : ""}
                 className="form-control"
               />
             </div>
@@ -76,6 +130,7 @@ function EditUser() {
                 id="email"
                 className="form-control"
                 onChange={(e) => setEmail(e.target.value)}
+                value={email ? email : ""}
                 required
               />
             </div>

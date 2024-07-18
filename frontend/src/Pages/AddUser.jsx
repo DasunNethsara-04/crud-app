@@ -24,7 +24,7 @@ function AddUser() {
         },
       })
       .then((response) => {
-        if (response != null) {
+        if (response != null && response.status === 200) {
           alert("User added successfully!");
           setFirstName("");
           setLastName("");

@@ -47,7 +47,10 @@ function ShowUsers() {
                   <td>{user.phoneNo}</td>
                   <td>{user.email}</td>
                   <td>
-                    <Link to={"/user"} className="btn btn-outline-primary">
+                    <Link
+                      to={`/user/${user.id}`}
+                      className="btn btn-outline-primary"
+                    >
                       <i className="fa-regular fa-user"></i>
                     </Link>
                     &nbsp;
