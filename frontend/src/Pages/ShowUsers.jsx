@@ -18,7 +18,20 @@ function ShowUsers() {
   }, []);
 
   const makeDeleteRequest = (userId) => {
-    console.log(userId);
+    let con = confirm("Are you sure you want to delete this user?");
+    if (con) {
+      axios
+        .delete(`http://localhost:8080/api/v1/deleteuser/${userId}`)
+        .then((response) => {
+          if (response.status === 200) {
+            alert("User deleted successfully!");
+            window.location.reload();
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   };
 
   return (
@@ -39,9 +52,9 @@ function ShowUsers() {
           </thead>
           <tbody>
             {Array.isArray(users) &&
-              users.map((user) => (
+              users.map((user, index) => (
                 <tr key={user.id}>
-                  <th>{user.id}</th>
+                  <th>{index + 1}</th>
                   <td>{user.firstName}</td>
                   <td>{user.lastName}</td>
                   <td>{user.phoneNo}</td>
