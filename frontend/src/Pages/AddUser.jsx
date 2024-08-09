@@ -48,7 +48,6 @@ function AddUser() {
         <div className="shadow-lg p-3 mt-5 mb-5 bg-body-tertiary rounded">
           <form onSubmit={handleFormSubmit}>
             {" "}
-            {/* pass the event `e` to handleFormSubmit */}
             <div className="row">
               <div className="col-md-6">
                 <div className="mb-3">
@@ -75,7 +74,7 @@ function AddUser() {
                     name="lastName"
                     id="lname"
                     className="form-control"
-                    onChange={(e) => setLastName(e.target.value)} // corrected typo from setLastname to setLastName
+                    onChange={(e) => setLastName(e.target.value)}
                     required
                   />
                 </div>
